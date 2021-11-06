@@ -5,22 +5,18 @@ setEnvironment() {
         export FABRIC_CFG_PATH=${PWD}/config
 }
 
-reset(){
-        echo "======= Resetting configurations ======="
-        killall peer
-        killall orderer
-        rm -rf channel-artifacts
-        rm -rf crypto-materials
-}
+networkSetup() {
+        ./reset
 
-generateCertificates() {
         echo "======= Generating crypto materials ======="
         ./config/generate-crypto.sh
-}
-
-generateArtifacts() {
         echo "======= Generating artifacts ======="
         ./config/generate-artifacts.sh
+}
+
+networkUp() {
+        echo "======= Starting orderer ======="
+        ./config/start-orderer.sh
 }
 
 setEnvironment
@@ -29,9 +25,8 @@ if [ -z $1 ]; then
         echo "no arguments provided"
 else
         if [ "$1" == "up" ]; then
-                reset
-                generateCertificates
-                generateArtifacts
+                networkSetup
+                networkUp
         else
                 echo "umm"
         fi

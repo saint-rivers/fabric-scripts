@@ -6,15 +6,15 @@ OrdererOrgs:
       - Hostname: orderer
 
 PeerOrgs:
-  - Name: AzkabanUniOrg
-    Domain: azkaban.com
+  - Name: KshrdOrg
+    Domain: kshrd.com
     EnableNodeOUs: true
     Specs:
       - Hostname: devpeer
     Users:
       Count: 3
   - Name: SubwayOrg
-    Domain: subway.org
+    Domain: subway.com
     EnableNodeOUs: true
     Specs:
       - Hostname: devpeer

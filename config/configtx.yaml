@@ -29,7 +29,7 @@ Organizations:
   - &Org1
       Name: Kshrd
       ID: KshrdMSP
-      MSPDir: ../crypto-materials/peerOrganizations/azkaban.com/users/Admin@azkaban.com/msp
+      MSPDir: ../crypto-materials/peerOrganizations/kshrd.com/users/Admin@kshrd.com/msp
       Policies: &KshrdPolicies
         Readers:
           Type: Signature
@@ -51,7 +51,7 @@ Organizations:
   - &Org2
       Name: Subway
       ID: SubwayMSP
-      MSPDir: ../crypto-materials/peerOrganizations/subway.org/users/Admin@subway.org/msp
+      MSPDir: ../crypto-materials/peerOrganizations/subway.com/users/Admin@subway.com/msp
       Policies: &SubwayPolicies
         Readers:
           Type: Signature

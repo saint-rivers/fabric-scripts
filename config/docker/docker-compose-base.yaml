@@ -1,0 +1,71 @@
+version: '2'
+
+services:
+
+  orderer.shelbys.com:
+    container_name: orderer.shelbys.com
+    image: hyperledger/fabric-orderer
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      # - ORDERER_GENERAL_TLS_ENABLED=true
+      # - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      # - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      # - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+      - ../../channel-artifacts/orderer.genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ../../crypto-materials/ordererOrganizations/shelbys.com/users/Admin@shelbys.com/msp:/var/hyperledger/orderer/msp
+      # - :/var/hyperledger/orderer/tls
+      - ../../production:/var/hyperledger/production
+    ports:
+      - 7050:7050
+      
+
+  peer0.kshrd.com:
+    container_name: peer0.kshrd.com
+    extends: 
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - GODEBUG=netdns=go
+      - CORE_PEER_ID=peer0.kshrd.com
+      - CORE_PEER_ADDRESS=peer0.kshrd.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.kshrd.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.kshrd.com:7051
+      - CORE_PEER_LOCALMSPID=KshrdMSP
+    volumes:
+      - /var/run/:/host/var/run/
+      - ../../crypto-materials/peerOrganizations/kshrd.com/users/Admin@kshrd.com/msp:/etc/hyperledger/fabric/msp
+      # - ../crypto-config/peerOrganizations/shuru.shuru-network.com/peers/peer0.shuru.shuru-network.com/tls:/etc/hyperledger/fabric/tls
+      - peer0.kshrd.com:/var/hyperledger/production
+    ports:
+      - 7051:7051
+
+  peer0.subway.com:
+    container_name: peer0.subway.com
+    extends: 
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - GODEBUG=netdns=go
+      - CORE_PEER_ID=peer0.subway.com
+      - CORE_PEER_ADDRESS=peer0.subway.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.subway.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.subway.com:7051
+      - CORE_PEER_LOCALMSPID=SubwayMSP
+    volumes:
+      - /var/run/:/host/var/run/
+      - ../../crypto-materials/peerOrganizations/subway.com/users/Admin@subway.com/msp:/etc/hyperledger/fabric/msp
+      # - ../crypto-config/peerOrganizations/shuru.shuru-network.com/peers/peer0.shuru.shuru-network.com/tls:/etc/hyperledger/fabric/tls
+      - peer0.subway.com:/var/hyperledger/production
+    ports:
+      - 8051:7051
+
+  
