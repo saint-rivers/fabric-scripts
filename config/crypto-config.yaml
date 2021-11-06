@@ -1,0 +1,22 @@
+OrdererOrgs:
+  - Name: ShelbysOrg
+    Domain: shelbys.com
+    EnableNodeOUs: true
+    Specs:
+      - Hostname: orderer
+
+PeerOrgs:
+  - Name: AzkabanUniOrg
+    Domain: azkaban.com
+    EnableNodeOUs: true
+    Specs:
+      - Hostname: devpeer
+    Users:
+      Count: 3
+  - Name: SubwayOrg
+    Domain: subway.org
+    EnableNodeOUs: true
+    Specs:
+      - Hostname: devpeer
+    Users:
+      Count: 3

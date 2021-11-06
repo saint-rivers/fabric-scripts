@@ -1,0 +1,160 @@
+Capabilities:
+  Application: &ApplicationCapabilities
+    V2_0: true
+  Orderer: &OrdererCapabilities
+    V2_0: true
+  Channel: &ChannelCapabilities
+    V2_0: true
+
+Organizations:
+  - &Orderer
+      Name: OrdererOrg
+      SkipAsForeign: false
+      ID: OrdererMSP
+      MSPDir: ../crypto-materials/ordererOrganizations/shelbys.com/users/Admin@shelbys.com/msp
+      Policies: &OrdererPolicies
+        Readers:
+          Type: Signature
+          Rule: "OR('OrdererMSP.member')"
+        Writers:
+          Type: Signature
+          Rule: "OR('OrdererMSP.member')"
+        Admins:
+          Type: Signature
+          Rule: "OR('OrdererMSP.member')"
+        Endorsement:
+          Type: Signature
+          Rule: "OR('OrdererMSP.member')"
+
+  - &Org1
+      Name: Kshrd
+      ID: KshrdMSP
+      MSPDir: ../crypto-materials/peerOrganizations/azkaban.com/users/Admin@azkaban.com/msp
+      Policies: &KshrdPolicies
+        Readers:
+          Type: Signature
+          Rule: "OR('KshrdMSP.member')"
+        Writers:
+          Type: Signature
+          Rule: "OR('KshrdMSP.member')"
+        Admins:
+          Type: Signature
+          Rule: "OR('KshrdMSP.member')"
+        Endorsement:
+          Type: Signature
+          Rule: "OR('KshrdMSP.member')"
+
+      AnchorPeers: 
+        - Host: peer0.kshrd.com
+          Port: 7051
+  
+  - &Org2
+      Name: Subway
+      ID: SubwayMSP
+      MSPDir: ../crypto-materials/peerOrganizations/subway.org/users/Admin@subway.org/msp
+      Policies: &SubwayPolicies
+        Readers:
+          Type: Signature
+          Rule: "OR('SubwayMSP.member')"
+        Writers:
+          Type: Signature
+          Rule: "OR('SubwayMSP.member')"
+        Admins:
+          Type: Signature
+          Rule: "OR('SubwayMSP.member')"
+        Endorsement:
+          Type: Signature
+          Rule: "OR('SubwayMSP.member')"
+
+      AnchorPeers: 
+        - Host: peer0.subway.com
+          Port: 8051
+
+Orderer: &OrdererDefaults
+  OrdererType: solo
+  Addresses: 
+    - localhost:7060
+  BatchTimeout: 5s
+  BatchSize:
+    MaxMessageCount: 10
+    AbsoluteMaxBytes: 99 MB
+    PreferredMaxBytes: 512 KB
+  MaxChannels: 0
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "ANY Admins"
+    BlockValidation:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+  Organizations:
+  Capabilities:
+    <<: *OrdererCapabilities
+
+Channel: &ChannelDefaults
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+  Capabilities:
+    <<: *ChannelCapabilities
+
+Application: &ApplicationDefaults
+  Policies: &ApplicationDefaultPolicies
+    LifecycleEndorsement:
+      Type: ImplicitMeta
+      Rule: "ANY Endorsement"
+    Endorsement:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+  Capabilities:
+    <<: *ApplicationCapabilities
+  Organizations: 
+
+Profiles:
+  TwoOrgsOrdererGenesis: 
+    Capabilities:
+      <<: *ChannelCapabilities
+    <<: *ChannelDefaults
+    Orderer:
+      <<: *OrdererDefaults
+      Organizations:
+        - *Orderer
+      Capabilities: 
+        <<: *OrdererCapabilities
+    Consortiums:
+      SampleConsortium:
+        Organizations:
+          - *Org1
+
+  TwoOrgChannel:
+    <<: *ChannelDefaults
+    Consortium: SampleConsortium
+    Application: 
+      <<: *ApplicationDefaults
+      Organizations:
+        - *Org1
+        - *Org2
+      Capabilities:
+        <<: *ApplicationCapabilities
