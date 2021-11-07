@@ -11,7 +11,7 @@ Organizations:
       Name: OrdererOrg
       SkipAsForeign: false
       ID: OrdererMSP
-      MSPDir: ../crypto-materials/ordererOrganizations/shelbys.com/users/Admin@shelbys.com/msp
+      MSPDir: ../crypto-config/ordererOrganizations/shelbys.com/users/Admin@shelbys.com/msp
       Policies: &OrdererPolicies
         Readers:
           Type: Signature
@@ -29,7 +29,7 @@ Organizations:
   - &Org1
       Name: Kshrd
       ID: KshrdMSP
-      MSPDir: ../crypto-materials/peerOrganizations/kshrd.com/users/Admin@kshrd.com/msp
+      MSPDir: ../crypto-config/peerOrganizations/kshrd.com/users/Admin@kshrd.com/msp
       Policies: &KshrdPolicies
         Readers:
           Type: Signature
@@ -51,7 +51,7 @@ Organizations:
   - &Org2
       Name: Subway
       ID: SubwayMSP
-      MSPDir: ../crypto-materials/peerOrganizations/subway.com/users/Admin@subway.com/msp
+      MSPDir: ../crypto-config/peerOrganizations/subway.com/users/Admin@subway.com/msp
       Policies: &SubwayPolicies
         Readers:
           Type: Signature
@@ -107,7 +107,7 @@ Channel: &ChannelDefaults
       Rule: "ANY Writers"
     Admins:
       Type: ImplicitMeta
-      Rule: "MAJORITY Admins"
+      Rule: "ANY Admins"
   Capabilities:
     <<: *ChannelCapabilities
 
@@ -127,7 +127,7 @@ Application: &ApplicationDefaults
       Rule: "ANY Writers"
     Admins:
       Type: ImplicitMeta
-      Rule: "MAJORITY Admins"
+      Rule: "ANY Admins"
   Capabilities:
     <<: *ApplicationCapabilities
   Organizations: 
@@ -147,6 +147,7 @@ Profiles:
       SampleConsortium:
         Organizations:
           - *Org1
+          - *Org2
 
   TwoOrgChannel:
     <<: *ChannelDefaults
