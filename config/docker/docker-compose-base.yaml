@@ -4,7 +4,7 @@ services:
 
   orderer.shelbys.com:
     container_name: orderer.shelbys.com
-    image: hyperledger/fabric-orderer
+    image: hyperledger/fabric-orderer:amd64-2.2
     environment:
       - ORDERER_GENERAL_LOGLEVEL=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
@@ -20,13 +20,15 @@ services:
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     volumes:
-      - ../../channel-artifacts/orderer.genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-      - ../../crypto-materials/ordererOrganizations/shelbys.com/users/Admin@shelbys.com/msp:/var/hyperledger/orderer/msp
-      # - :/var/hyperledger/orderer/tls
-      - ../../production:/var/hyperledger/production
+    - ../../channel-artifacts/orderer.genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - ../../crypto-config/ordererOrganizations/shelbys.com/users/Admin@shelbys.com/msp:/var/hyperledger/orderer/msp
+    # - :/var/hyperledger/orderer/tls
+    - ../../production:/var/hyperledger/production
+    - orderer.shelbys.com:/var/hyperledger/production/orderer
     ports:
       - 7050:7050
-      
+    # networks:
+    #   - byfn
 
   peer0.kshrd.com:
     container_name: peer0.kshrd.com
@@ -42,11 +44,11 @@ services:
       - CORE_PEER_LOCALMSPID=KshrdMSP
     volumes:
       - /var/run/:/host/var/run/
-      - ../../crypto-materials/peerOrganizations/kshrd.com/users/Admin@kshrd.com/msp:/etc/hyperledger/fabric/msp
+      - ../../crypto-config/peerOrganizations/kshrd.com/users/Admin@kshrd.com/msp:/etc/hyperledger/fabric/msp
       # - ../crypto-config/peerOrganizations/shuru.shuru-network.com/peers/peer0.shuru.shuru-network.com/tls:/etc/hyperledger/fabric/tls
       - peer0.kshrd.com:/var/hyperledger/production
     ports:
-      - 7051:7051
+      - 7051:7053
 
   peer0.subway.com:
     container_name: peer0.subway.com
@@ -62,7 +64,7 @@ services:
       - CORE_PEER_LOCALMSPID=SubwayMSP
     volumes:
       - /var/run/:/host/var/run/
-      - ../../crypto-materials/peerOrganizations/subway.com/users/Admin@subway.com/msp:/etc/hyperledger/fabric/msp
+      - ../../crypto-config/peerOrganizations/subway.com/users/Admin@subway.com/msp:/etc/hyperledger/fabric/msp
       # - ../crypto-config/peerOrganizations/shuru.shuru-network.com/peers/peer0.shuru.shuru-network.com/tls:/etc/hyperledger/fabric/tls
       - peer0.subway.com:/var/hyperledger/production
     ports:

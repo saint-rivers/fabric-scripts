@@ -6,7 +6,8 @@ setEnvironment() {
 }
 
 networkSetup() {
-        ./reset
+        ./reset.sh
+        ./clear-containers.sh
 
         echo "======= Generating crypto materials ======="
         ./config/generate-crypto.sh
@@ -16,8 +17,17 @@ networkSetup() {
 
 networkUp() {
         echo "======= Starting orderer ======="
-        ./config/start-orderer.sh
+        ./config/start-network.sh
 }
+
+# createChannel() {
+#         # export ORDERER_ADDRESS="localhost:7050"
+#         # export CHANNEL_NAME=mychannel
+#         # peer channel create -o ${ORDERER_ADDRESS} -c ${CHANNEL_NAME} -f ./channel-artifacts/channel.tx
+
+#         # sleep 4s
+#         # peer channel join -b ./mychannel.block
+# }
 
 setEnvironment
 
@@ -27,7 +37,12 @@ else
         if [ "$1" == "up" ]; then
                 networkSetup
                 networkUp
-        else
-                echo "umm"
         fi
 fi
+
+if [ "$1" == "channel" ]; then
+        # createChannel
+        ./login-fabric-cli.sh
+        ./scripts/create-channel.sh
+fi
+
