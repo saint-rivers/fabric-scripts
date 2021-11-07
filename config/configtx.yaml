@@ -73,7 +73,7 @@ Organizations:
 Orderer: &OrdererDefaults
   OrdererType: solo
   Addresses: 
-    - localhost:7060
+    - orderer.shelbys.com:7050
   BatchTimeout: 5s
   BatchSize:
     MaxMessageCount: 10

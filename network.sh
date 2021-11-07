@@ -20,14 +20,14 @@ networkUp() {
         ./config/start-network.sh
 }
 
-createChannel() {
-        export ORDERER_ADDRESS="localhost:7060"
-        export CHANNEL_NAME=mychannel
-        peer channel create -o ${ORDERER_ADDRESS} -c ${CHANNEL_NAME} -f ./channel-artifacts/channel.tx
+# createChannel() {
+#         # export ORDERER_ADDRESS="localhost:7050"
+#         # export CHANNEL_NAME=mychannel
+#         # peer channel create -o ${ORDERER_ADDRESS} -c ${CHANNEL_NAME} -f ./channel-artifacts/channel.tx
 
-        sleep 4s
-        peer channel join -b ./mychannel.block
-}
+#         # sleep 4s
+#         # peer channel join -b ./mychannel.block
+# }
 
 setEnvironment
 
@@ -41,6 +41,8 @@ else
 fi
 
 if [ "$1" == "channel" ]; then
-        createChannel
+        # createChannel
+        ./login-fabric-cli.sh
+        ./scripts/create-channel.sh
 fi
 
