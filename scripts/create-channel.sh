@@ -4,7 +4,8 @@
 # This script is only meant to be used inside the fabric-cli container
 
 export ORDERER_ADDRESS="orderer.shelbys.com:7050"
-export CHANNEL_NAME=mychannel
+export CHANNEL_NAME=mychannel 
+
 # peer channel create -o ${ORDERER_ADDRESS} -c ${CHANNEL_NAME} -f /opt/gopath/fabric-samples/shelbys/channel-artifacts/channel.tx
 echo "======= Creating a new channel ======"
 peer channel create -o ${ORDERER_ADDRESS} -c ${CHANNEL_NAME} -f ./config/channel-artifacts/channel.tx --outputBlock ./config/channel-artifacts/${CHANNEL_NAME}.block
