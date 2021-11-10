@@ -24,7 +24,7 @@ networkUp() {
 networkDown() {
         echo "======= Stopping network ======="
         echo COMPOSE_PROJECT_NAME=net >.env
-        docker-compose -f ./config/docker/docker-compose-cli.yaml down
+        docker-compose -f ./config/docker/docker-compose-cli.yaml down 2> /dev/null
 }
 
 # createChannel() {
@@ -47,11 +47,12 @@ else
                 ;;
         "down")
                 networkDown
-                ./reset.sh
+                ./reset.sh 2> /dev/null
                 ;;
         "channel")
                 ./login-fabric-cli.sh
                 # ./scripts/create-channel.sh
+                
                 ;;
         esac
 fi

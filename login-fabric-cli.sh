@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export FABRIC_CFG_PATH=${PWD}/config
+
 setUpGlobalsForKshrd() {
     export CORE_PEER_LOCALMSPID=KshrdMSP
     export CORE_PEER_MSPCONFIGPATH=/opt/gopath/fabric-samples/shelbys/crypto-config/peerOrganizations/kshrd.com/users/Admin@kshrd.com/msp
@@ -19,6 +21,26 @@ docker exec \
 -e "CORE_PEER_LOCALMSPID=${CORE_PEER_LOCALMSPID}" \
 -e "CORE_PEER_MSPCONFIGPATH=${CORE_PEER_MSPCONFIGPATH}" \
 -e "CORE_PEER_ADDRESS=${CORE_PEER_ADDRESS}"  -it cli bash -c "./scripts/create-channel.sh"
+
+
+docker exec \
+-e "CORE_PEER_LOCALMSPID=${CORE_PEER_LOCALMSPID}" \
+-e "CORE_PEER_MSPCONFIGPATH=${CORE_PEER_MSPCONFIGPATH}" \
+-e "CORE_PEER_ADDRESS=${CORE_PEER_ADDRESS}"  -it cli bash -c "./scripts/update-anchor-peer-kshrd.sh"
+
+
+
+setUpGlobalsForSubway
+
+docker exec \
+-e "CORE_PEER_LOCALMSPID=${CORE_PEER_LOCALMSPID}" \
+-e "CORE_PEER_MSPCONFIGPATH=${CORE_PEER_MSPCONFIGPATH}" \
+-e "CORE_PEER_ADDRESS=${CORE_PEER_ADDRESS}"  -it cli bash -c "./scripts/create-channel.sh"
+
+docker exec \
+-e "CORE_PEER_LOCALMSPID=${CORE_PEER_LOCALMSPID}" \
+-e "CORE_PEER_MSPCONFIGPATH=${CORE_PEER_MSPCONFIGPATH}" \
+-e "CORE_PEER_ADDRESS=${CORE_PEER_ADDRESS}"  -it cli bash -c "./scripts/update-anchor-peer-subway.sh"
 
 
 # docker exec  -e "CORE_PEER_LOCALMSPID=SubwayMSP" \

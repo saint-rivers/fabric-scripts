@@ -18,3 +18,4 @@ peer channel list
 sleep 4s
 echo "======= Joining the new channel ======"
 peer channel join -b ./config/channel-artifacts/mychannel.block 
+
