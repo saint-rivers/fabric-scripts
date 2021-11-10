@@ -1,3 +1,6 @@
 /channel-artifacts
 /crypto-config
 /production
+/chaincode/vendor
+/chaincode/go.mod
+/chaincode/go.sum

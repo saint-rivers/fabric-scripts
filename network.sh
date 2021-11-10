@@ -24,7 +24,13 @@ networkUp() {
 networkDown() {
         echo "======= Stopping network ======="
         echo COMPOSE_PROJECT_NAME=net >.env
-        docker-compose -f ./config/docker/docker-compose-cli.yaml down 2> /dev/null
+        docker-compose -f ./config/docker/docker-compose-cli.yaml down 2>/dev/null
+}
+
+deployChaincode() {
+        echo "======= Deploying chaincode ======="
+        ./chaincode/scripts/setup-chaincode.sh
+        ./chaincode/scripts/deploy-chaincode.sh
 }
 
 # createChannel() {
@@ -39,7 +45,7 @@ networkDown() {
 setEnvironment
 
 if [ -z $1 ]; then
-        echo "no arguments provided"
+        ./network.sh down && ./network.sh up && ./network.sh channel && ./network.sh deployCC
 else
         case "$1" in
         "up")
@@ -47,12 +53,13 @@ else
                 ;;
         "down")
                 networkDown
-                ./reset.sh 2> /dev/null
+                ./reset.sh 2>/dev/null
                 ;;
         "channel")
                 ./login-fabric-cli.sh
-                # ./scripts/create-channel.sh
-                
+                ;;
+        "deployCC")
+                deployChaincode
                 ;;
         esac
 fi
