@@ -16,8 +16,15 @@ networkSetup() {
 }
 
 networkUp() {
-        echo "======= Starting orderer ======="
-        ./config/start-network.sh
+        echo "======= Starting network ======="
+        echo COMPOSE_PROJECT_NAME=net >.env
+        docker-compose -f ./config/docker/docker-compose-cli.yaml up -d
+}
+
+networkDown() {
+        echo "======= Stopping network ======="
+        echo COMPOSE_PROJECT_NAME=net >.env
+        docker-compose -f ./config/docker/docker-compose-cli.yaml down 2> /dev/null
 }
 
 # createChannel() {
@@ -34,15 +41,18 @@ setEnvironment
 if [ -z $1 ]; then
         echo "no arguments provided"
 else
-        if [ "$1" == "up" ]; then
-                networkSetup
-                networkUp
-        fi
+        case "$1" in
+        "up")
+                networkSetup && networkUp
+                ;;
+        "down")
+                networkDown
+                ./reset.sh 2> /dev/null
+                ;;
+        "channel")
+                ./login-fabric-cli.sh
+                # ./scripts/create-channel.sh
+                
+                ;;
+        esac
 fi
-
-if [ "$1" == "channel" ]; then
-        # createChannel
-        ./login-fabric-cli.sh
-        ./scripts/create-channel.sh
-fi
-
